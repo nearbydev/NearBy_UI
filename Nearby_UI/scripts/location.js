@@ -23,6 +23,10 @@
                     position = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
                     map.panTo(position);
                     that._putMarker(position);
+                    
+                    //extra marker 22.277191,114.240177
+                    var shop_loc = new google.maps.LatLng(22.277191, 114.240177);
+                    //that._putMarker(shop_loc);
 
                     that._isLoading = false;
                     that.hideLoading();
@@ -100,7 +104,7 @@
             app.locationService.viewModel.set("isGoogleMapsInitialized", true);
 
             mapOptions = {
-                zoom: 15,
+                zoom: 16,
                 mapTypeId: google.maps.MapTypeId.ROADMAP,
                 zoomControl: true,
                 zoomControlOptions: {
