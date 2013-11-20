@@ -23,7 +23,7 @@
     <!--map-->
     <div id="tabstrip-map"
         data-role="view"
-        data-title="NearBy 哩一帶"
+        data-title="NearBy"
         data-init="app.locationService.initLocation"
         data-show="app.locationService.show"
         data-hide="app.locationService.hide"
@@ -68,7 +68,7 @@
         </div>
         
     	<div>
-            <ul id="march-listview"></ul>
+            <ul id="march_list_view"></ul>
         </div>
     </div>
     
@@ -77,8 +77,6 @@
         data-role="view"
          data-init="fav_list"
         data-title="Favourite">
-
-       
     
         <ul id="fav-listview"></ul>
     </div>
@@ -176,19 +174,24 @@
             <div data-role="tabstrip">
                 <a href="#tabstrip-map" data-icon="map-button">Map</a>
                 <a href="#tabstrip-list" data-icon="list-button">List</a>
-                <a href="#tabstrip-fav" data-icon="favorites">Favorites</a>
                 <a href="#tabstrip-add" data-icon="add-button">Add</a>
+                <a href="#tabstrip-fav" data-icon="favorites">Favorites</a>
                 <a href="#tabstrip-more" data-icon="more">More</a>
             </div>
         </div>
     </div>
 
+    
+    
 <script type="text/x-kendo-tmpl" id="march_list-template">
     <div class="product">
-        <h3>#:ProductName#</h3>
-        <p>#:kendo.toString(UnitPrice, "c")#</p>
+        <h3>#:name#</h3>
+        <p>#:address#</p>
+        <p>Tel: #:phone#</p>
     </div>
 </script>
+    
+    
 
 <script type="text/x-kendo-tmpl" id="fav_list-template">
     <div class="product">
@@ -214,7 +217,7 @@
         overflow: hidden;
     }
     .product p {
-        font-size: 1em;
+        font-size: 0.9em;
         margin: 0;
         padding: .3em 0 0;
     }

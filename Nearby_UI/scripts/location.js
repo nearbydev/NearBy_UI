@@ -3,6 +3,25 @@
         geocoder,
         LocationViewModel,
         app = global.app = global.app || {};
+    
+    var IMAGE_ROOT = "images/"; 
+    
+    var merch_list = [
+      ['Starsbucks', 22.300867,114.16746, IMAGE_ROOT + "starbucks_logo.png"],
+      ['Fortress', 22.300343,114.167872, null],
+      ['The Royal Pacific Hotal and Towers', 22.300237,114.168218, null],
+      ['Fotomax', 22.277357,114.23942, null],
+      ["Mcdonld's",22.282961,114.1564, IMAGE_ROOT + "mcdonald_logo.png"],
+      ["Mcdonld's",22.283974,114.157108, IMAGE_ROOT + "mcdonald_logo.png"],
+      ["Mcdonld's",22.286257,114.135479, IMAGE_ROOT + "mcdonald_logo.png"],
+      ["Mcdonld's",22.282663,114.128526, IMAGE_ROOT + "mcdonald_logo.png"],
+      ["Mcdonld's",22.270789,114.149984, IMAGE_ROOT + "mcdonald_logo.png"],
+      ["Mcdonld's",22.276034,114.24071, IMAGE_ROOT + "mcdonald_logo.png"],
+      ["Pricerite",22.277144,114.177323, IMAGE_ROOT + "pricerite_logo.png"],
+      ["Pricerite",22.380119,114.186153, IMAGE_ROOT + "pricerite_logo.png"],
+      ["Pricerite",22.445937,114.023739, IMAGE_ROOT + "pricerite_logo.png"],
+      ["Pricerite",22.280271,114.185402, IMAGE_ROOT + "pricerite_logo.png"]
+    ];
 
     LocationViewModel = kendo.data.ObservableObject.extend({
         _lastMarker: null,
@@ -25,9 +44,19 @@
                     that._putMarker(position);
                     
                     //extra marker 22.277191,114.240177
-                    var shop_loc = new google.maps.LatLng(22.277191, 114.240177);
-                    //that._putMarker(shop_loc);
+                    
+                    //China HK City
+                    //==============================
+                    //Starsbucks 22.300867,114.16746
+                    //Fortress 22.300343,114.167872
+                    //The Royal Pacific Hotal and Towers 22.300237,114.168218
+                    
+                    var i;
 
+                    for (i = 0; i < merch_list.length; i++) {  
+                        that._addMarker(new google.maps.LatLng(merch_list[i][1], merch_list[i][2]),merch_list[i][0],merch_list[i][3]);
+                    }
+                    
                     that._isLoading = false;
                     that.hideLoading();
                 },
@@ -85,11 +114,43 @@
             if (that._lastMarker !== null && that._lastMarker !== undefined) {
                 that._lastMarker.setMap(null);
             }
+            
+            var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
 
             that._lastMarker = new google.maps.Marker({
                 map: map,
-                position: position
+                position: position,
+                icon: IMAGE_ROOT + "blue_dot_circle_v2.png"
             });
+            
+            var infowindow = new google.maps.InfoWindow({
+				content: "You are here"
+			});
+            
+            google.maps.event.addListener(that._lastMarker, 'mousedown', function() {
+				infowindow.open(map, that._lastMarker);
+			});
+        },
+        
+        _addMarker: function (position, pos_title, marker_path) {
+            if(marker_path == null || marker_path == undefined){
+                marker_path = IMAGE_ROOT + "default_marker.png";
+            }
+            
+            var temp_marker = new google.maps.Marker({
+                map: map,
+                position: position,
+                title: pos_title,
+                icon: marker_path
+            });
+            
+            var infowindow = new google.maps.InfoWindow({
+				content: pos_title
+			});
+            
+            google.maps.event.addListener(temp_marker, 'mousedown', function() {
+				infowindow.open(map, temp_marker);
+			});
         }
     });
 
@@ -104,7 +165,7 @@
             app.locationService.viewModel.set("isGoogleMapsInitialized", true);
 
             mapOptions = {
-                zoom: 16,
+                zoom: 18,
                 mapTypeId: google.maps.MapTypeId.ROADMAP,
                 zoomControl: true,
                 zoomControlOptions: {
@@ -116,6 +177,8 @@
             };
 
             map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+            //var GeoMarker = new GeolocationMarker(map);
+            
             geocoder = new google.maps.Geocoder();
             app.locationService.viewModel.onNavigateHome.apply(app.locationService.viewModel, []);
         },
