@@ -11,17 +11,30 @@
       ['Fortress', 22.300343,114.167872, null],
       ['The Royal Pacific Hotal and Towers', 22.300237,114.168218, null],
       ['Fotomax', 22.277357,114.23942, null],
-      ["Mcdonld's",22.282961,114.1564, IMAGE_ROOT + "mcdonald_logo.png"],
-      ["Mcdonld's",22.283974,114.157108, IMAGE_ROOT + "mcdonald_logo.png"],
-      ["Mcdonld's",22.286257,114.135479, IMAGE_ROOT + "mcdonald_logo.png"],
-      ["Mcdonld's",22.282663,114.128526, IMAGE_ROOT + "mcdonald_logo.png"],
-      ["Mcdonld's",22.270789,114.149984, IMAGE_ROOT + "mcdonald_logo.png"],
-      ["Mcdonld's",22.276034,114.24071, IMAGE_ROOT + "mcdonald_logo.png"],
+      ["Mcdonald's",22.282961,114.1564, IMAGE_ROOT + "mcdonald_logo.png"],
+      ["Mcdonald's",22.283974,114.157108, IMAGE_ROOT + "mcdonald_logo.png"],
+      ["Mcdonald's",22.286257,114.135479, IMAGE_ROOT + "mcdonald_logo.png"],
+      ["Mcdonald's",22.282663,114.128526, IMAGE_ROOT + "mcdonald_logo.png"],
+      ["Mcdonald's",22.270789,114.149984, IMAGE_ROOT + "mcdonald_logo.png"],
+      ["Mcdonald's",22.276034,114.24071, IMAGE_ROOT + "mcdonald_logo.png"],
       ["Pricerite",22.277144,114.177323, IMAGE_ROOT + "pricerite_logo.png"],
       ["Pricerite",22.380119,114.186153, IMAGE_ROOT + "pricerite_logo.png"],
       ["Pricerite",22.445937,114.023739, IMAGE_ROOT + "pricerite_logo.png"],
       ["Pricerite",22.280271,114.185402, IMAGE_ROOT + "pricerite_logo.png"]
     ];
+    
+    var myDS = new kendo.data.DataSource({
+        transport: {
+            read: { 
+                url: "http://theonlyw.com/nearby_api.php?method=getAllMerchant",
+                dataType: "jsonp"
+            } 
+        },
+        sort: {
+            field: "merch_name_en",
+            dir: "asc"
+        }
+    });
 
     LocationViewModel = kendo.data.ObservableObject.extend({
         _lastMarker: null,
@@ -52,10 +65,20 @@
                     //The Royal Pacific Hotal and Towers 22.300237,114.168218
                     
                     var i;
-
-                    for (i = 0; i < merch_list.length; i++) {  
+                    
+                    myDS.fetch(function(){
+                      var data = this.data();
+                      for (i = 0; i < data.length; i++) { 
+                          //console.log(data[i].merch_name_en);
+                          if(data[i].marker_image){data[i].marker_image = IMAGE_ROOT + data[i].marker_image;}
+                          that._addMarker(new google.maps.LatLng(data[i].lat, data[i].lng),data[i].merch_name_zh,data[i].marker_image);
+                      }
+                    });
+                    
+                    
+                    /*for (i = 0; i < merch_list.length; i++) {  
                         that._addMarker(new google.maps.LatLng(merch_list[i][1], merch_list[i][2]),merch_list[i][0],merch_list[i][3]);
-                    }
+                    }*/
                     
                     that._isLoading = false;
                     that.hideLoading();
@@ -165,7 +188,7 @@
             app.locationService.viewModel.set("isGoogleMapsInitialized", true);
 
             mapOptions = {
-                zoom: 18,
+                zoom: 12,
                 mapTypeId: google.maps.MapTypeId.ROADMAP,
                 zoomControl: true,
                 zoomControlOptions: {

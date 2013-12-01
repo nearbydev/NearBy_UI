@@ -148,14 +148,8 @@
     </div>
 
     <!--Category-->
-	<div data-role="drawer" id="my-drawer" style="width: 270px;" data-position="right" >
-            <ul data-role="listview" data-type="group">
-                <li>Category 1</li>
-                <li>Category 2</li>
-                <li>Category 3</li>
-                <li>Category 4</li>
-                <li>Category 5</li>
-            </ul>
+	<div data-role="drawer" data-init="cat_list" id="my-drawer" style="width: 270px;" data-position="right" >
+            <ul id="cat_list_view"></ul>
     </div>   
     
     
@@ -185,9 +179,15 @@
     
 <script type="text/x-kendo-tmpl" id="march_list-template">
     <div class="product">
-        <h3>#:name#</h3>
-        <p>#:address#</p>
-        <p>Tel: #:phone#</p>
+        <h3>#:merch_name_zh# #:merch_name_en#</h3>
+        <p>#:address_zh#</p>
+        <p>電話: #:tel1#</p> 
+    </div>
+</script>
+    
+<script type="text/x-kendo-tmpl" id="cat_list-template">
+    <div class="product">
+        <p>#:cat_desc#</p>
     </div>
 </script>
     
