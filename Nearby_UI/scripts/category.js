@@ -1,5 +1,5 @@
 
-function cat_list() {
+function cat_list(e) {
     	
         var myDS = new kendo.data.DataSource({
             transport: {
